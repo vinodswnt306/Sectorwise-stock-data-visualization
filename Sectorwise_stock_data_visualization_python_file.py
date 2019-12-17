@@ -1,5 +1,14 @@
-import yfinance as yf
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 17 13:07:07 2019
 
+@author: Asus
+"""
+
+import yfinance as yf
+from matplotlib.dates import DateFormatter
+import matplotlib.dates as mdates
+import numpy as np
 
 def data(ticker):
     data = yf.download(  # or pdr.get_data_yahoo(...
@@ -50,48 +59,21 @@ def makedf(list):
 def plot(list,sector):
     d = makedf(list)
     import matplotlib.pyplot as plt
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(10, 8))
-    axes[0,0].plot(d['df1'].Close)
-    axes[0,0].set(xlabel=list[0])
-    axes[0,0].grid(axis='x')
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(15, 15))
     
-    
-    axes[0,1].plot(d['df2'].Close)
-    axes[0,1].set(xlabel=list[1])
-    axes[0,1].grid(axis='x')
-    
-    axes[0,2].plot(d['df3'].Close)
-    axes[0,2].set(xlabel=list[2])
-    axes[0,2].grid(axis='x')
-    
-    axes[1,0].plot(d['df4'].Close)
-    axes[1,0].set(xlabel=list[3])
-    axes[1,0].grid(axis='x')
-    
-    axes[1,1].plot(d['df5'].Close)
-    axes[1,1].set(xlabel=list[4])
-    axes[1,1].grid(axis='x')
-    
-    axes[1,2].plot(d['df6'].Close)
-    axes[1,2].set(xlabel=list[5])
-    axes[1,2].grid(axis='x')
-    
-    axes[2,0].plot(d['df7'].Close)
-    axes[2,0].set(xlabel=list[6])
-    axes[2,0].grid(axis='x')
-    
-    axes[2,1].plot(d['df8'].Close)
-    axes[2,1].set(xlabel=list[7])
-    axes[2,1].grid(axis='x')
-    
-    axes[2,2].plot(d['df9'].Close)
-    axes[2,2].set(xlabel=list[8])
-    axes[2,2].grid(axis='x')
+    for i,j,k in zip([0,0,0,1,1,1,2,2,2], [0,1,2,0,1,2,0,1,2],np.arange(1,10)):        
+        axes[i,j].plot(d['df'+str(k)].Close)
+        axes[i,j].set(xlabel=list[k-1])
+        axes[i,j].grid(axis='x')
+        # Define the date format
+        date_form = DateFormatter("%m/%d")
+        axes[i,j].xaxis.set_major_formatter(date_form)
+        # Ensure ticks fall once every other week (interval=2) 
+        axes[i,j].xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
     
     fig.suptitle(sector)
-    fig.subplots_adjust(top=0.88)
+    fig.subplots_adjust(top=2)
     fig.tight_layout()
-    #fig.autofmt_xdate(rotation=45)
     fig.savefig(r"C:\Users\Asus\Desktop\pproject\options algo\\" + sector + ".png")
     
 
@@ -106,7 +88,6 @@ nifty_pharma = 'DRREDDY	PEL	DIVISLAB	LUPIN	CIPLA	SUNPHARMA	AUROPHARMA	GLENMARK	B
 nifty_psu = 'SBIN	CANBK	INDIANB	BANKBARODA	BANKINDIA	PNB	UNIONBANK	ORIENTBANK	J&KBANK	SYNDIBANK	ALBK	CENTRALBK'
 nifty_private_bank = 'KOTAKBANK	INDUSINDBK	HDFCBANK	AXISBANK	ICICIBANK	RBLBANK	CUB	FEDERALBNK	YESBANK	IDFCFIRSTB'
 nifty_realty = 'GODREJPROP	PHOENIXLTD	OBEROIRLTY	SUNTECK	SOBHA	MAHLIFE	PRESTIGE	DLF	BRIGADE	IBREALEST'
-
 
 
 nifty_bank = nifty_bank.split()[0:9]
@@ -145,6 +126,10 @@ plot(nifty_realty,'nifty_realty')
 
 
 
+
+
+
+
 # =============================================================================
 # For Tableau
 # =============================================================================
@@ -166,24 +151,4 @@ for i in df.keys():
     df1.to_excel(writer,'Sheet' + i)
 writer.save()
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
