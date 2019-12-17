@@ -71,9 +71,9 @@ def plot(list,sector):
         # Ensure ticks fall once every other week (interval=2) 
         axes[i,j].xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
     
-    fig.suptitle(sector)
-    fig.subplots_adjust(top=2)
-    fig.tight_layout()
+    fig.suptitle(sector, fontsize=48)
+    #fig.subplots_adjust(top=2)
+    #fig.tight_layout()
     fig.savefig(r"C:\Users\Asus\Desktop\pproject\options algo\\" + sector + ".png")
     
 
